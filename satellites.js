@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalBody = document.getElementById("modalBody");
   const closeModalBtn = document.getElementById("closeModalBtn");
   const toast = document.getElementById("toast");
-  const loadAllBtn = document.getElementById("loadAll");
   const searchRangeBtn = document.getElementById("searchRange");
   const loadTodayBtn = document.getElementById("loadToday");
   const startInput = document.getElementById("start");
@@ -23,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let cachedNews = [];
   let currentView = "all"; // all | today | range
+
+  const sortByDateDesc = (items = []) =>
+    [...items].sort((a, b) => b.date.localeCompare(a.date));
 
   // Helpers
   const showToast = (msg) => {
@@ -142,28 +144,33 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Acciones
-  loadAllBtn.addEventListener("click", async () => {
-    cachedNews = await fetchNews();
-    currentView = "all";
-    renderNews(cachedNews);
-  });
-
   loadTodayBtn.addEventListener("click", () => {
     if (!cachedNews.length) return showToast("Primero carga noticias");
     currentView = "today";
-    renderNews(cachedNews.filter((n) => isToday(n.date)));
+    renderNews(sortByDateDesc(cachedNews.filter((n) => isToday(n.date))));
   });
 
   searchRangeBtn.addEventListener("click", () => {
     if (!cachedNews.length) return showToast("Primero carga noticias");
     const start = startInput.value;
     const end = endInput.value;
-    if (!start || !end) return showToast("Faltan fechas");
-    if (start > end) return showToast("Fecha inicio mayor a fin");
+
+    if (start && end && start > end) return showToast("Fecha inicio mayor a fin");
+
     currentView = "range";
-    const filtered = cachedNews.filter((n) => n.date >= start && n.date <= end);
-    renderNews(filtered);
+
+    // If both dates are provided, filter between them; otherwise show all (newest → oldest)
+    const filtered = start && end
+      ? cachedNews.filter((n) => n.date >= start && n.date <= end)
+      : cachedNews;
+
+    renderNews(sortByDateDesc(filtered));
   });
 
-  // Inicio vacío; no render hasta pulsar botones
+  // Carga inicial automática
+  (async () => {
+    cachedNews = await fetchNews();
+    currentView = "all";
+    renderNews(sortByDateDesc(cachedNews));
+  })();
 });

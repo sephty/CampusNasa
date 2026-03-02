@@ -20,9 +20,11 @@ Aplicación web interactiva para explorar la **Imagen Astronómica del Día (APO
 ```
 📁 nasa-space-explorer/
 │
-├── index.html     → Estructura principal de la aplicación
-├── styles.css     → Diseño visual, animaciones y layout
-└── app.js         → Lógica, API, renderizado y favoritos
+├── index.html       → Vista principal APOD (Imagen del Día)
+├── app.js           → Lógica APOD, rangos, modal, favoritos
+├── satellites.html  → Vista Noticias NASA (Image & Video Library)
+├── satellites.js    → Lógica de noticias, filtros y modal
+└── styles.css       → Diseño visual, animaciones y layout compartido
 ```
 
 ---
@@ -68,7 +70,7 @@ git clone https://github.com/tuusuario/nasa-space-explorer.git
 cd nasa-space-explorer
 ```
 
-### 2️⃣ Configurar la API Key
+### 2️⃣ Configurar la API Key (solo para APOD en `app.js`)
 
 En `app.js`:
 
@@ -80,7 +82,10 @@ const API_KEY = "TU_API_KEY_AQUI";
 
 ### 3️⃣ Ejecutar
 
-Simplemente abre `index.html` en tu navegador.
+Abre en el navegador la vista que necesites:
+
+- `index.html` → Explorador APOD (Imagen del Día, rango de fechas, favoritos)
+- `satellites.html` → Noticias NASA (imágenes de misiones/eventos)
 
 > ✅ No requiere servidor ni dependencias externas.
 
@@ -116,6 +121,35 @@ checkIfFavorite(date)
 toggleFavorite(data)
 showFavorites()
 ```
+
+---
+
+## 🛰️ Vista de Noticias NASA (`satellites.html` / `satellites.js`)
+
+Esta vista consume la **NASA Image and Video Library** (sin API key) para mostrar imágenes relacionadas con noticias y misiones.
+
+- **Endpoint base:** `https://images-api.nasa.gov/search?q=nasa%20news&media_type=image`
+- **Filtro de relevancia:** títulos que contengan `nasa`, `mission`, `launch`, `update` y descripciones con suficiente longitud.
+
+### Controles y flujo
+- **📰 Cargar Noticias:** obtiene y cachea las imágenes filtradas.
+- **📅 Hoy:** filtra dentro del caché por fecha actual.
+- **🔍 Buscar Rango:** filtra por fechas usando los inputs `start` y `end` (máximo día de hoy). Requiere haber cargado noticias primero.
+- **Modal:** clic en tarjeta abre detalle con título, fecha, imagen y descripción completa.
+- **Favoritos:** el botón "Favoritos" redirige a `index.html` (no hay favoritos propios en noticias).
+
+### UX y validaciones
+- Loader mientras se consulta el endpoint.
+- Toasts para errores o validaciones (falta cargar, fechas vacías o invertidas).
+- Inicio vacío: no renderiza hasta que el usuario pulse "Cargar Noticias".
+
+### Limitaciones actuales
+- Sin paginación del feed; solo el primer lote del endpoint de búsqueda.
+- No se guarda favoritos desde esta vista (se usan los de `index.html`).
+
+### Ideas de mejora
+- Añadir paginación / siguiente página del feed de noticias.
+- Integrar favoritos o compartir desde la vista de noticias.
 
 ---
 
