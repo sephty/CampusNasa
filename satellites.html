@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Space Explorer | Pro Edition</title>
+    <title>NASA Space Explorer | Noticias</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,21 +11,22 @@
 <nav>
   <h1>NASA Explorer</h1>
   <div style="display:flex; gap:10px; align-items:center;">
-    <a class="btn btn-primary" href="satellites.html">📰 Noticias</a>
+    <a class="btn btn-primary" href="index.html">📰 Imagenes</a>
     <button class="btn btn-primary" onclick="showFavorites()">⭐ Favoritos</button>
   </div>
 </nav>
 
 <section class="hero">
-  <h2>Descubre el Cosmos</h2>
-  <p>Explora la Imagen Astronómica del Día (APOD)</p>
+  <h2>Noticias NASA</h2>
+  <p>Explora imágenes relacionadas con noticias y misiones</p>
 </section>
 
 <div class="controls">
-  <input type="date" id="start">
-  <input type="date" id="end">
-  <button class="btn btn-primary" onclick="loadRange()">🔍 Buscar Rango</button>
-  <button class="btn btn-primary" style="background:#334155; color:white;" onclick="loadToday()">📅 Hoy</button>
+  <input type="date" id="start" aria-label="Fecha inicio" title="Fecha inicio">
+  <input type="date" id="end" aria-label="Fecha fin" title="Fecha fin">
+  <button class="btn btn-primary" style="background:#334155; color:white;" id="loadAll">📰 Cargar Noticias</button>
+  <button class="btn btn-primary" style="background:#334155; color:white;" id="loadToday">📅 Hoy</button>
+  <button class="btn btn-primary" id="searchRange">🔍 Buscar Rango</button>
 </div>
 
 <div id="statusContainer"></div>
@@ -40,6 +41,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="app.js"></script>
+<script src="satellites.js"></script>
 </body>
 </html>

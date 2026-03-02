@@ -1,10 +1,13 @@
 /**
  * CONFIGURACIÓN Y ESTADO
  */
-const API_KEY = "API KEY";
+const API_KEY = "YOUR API";
 const BASE_URL = "https://api.nasa.gov/planetary/apod";
 const gallery = document.getElementById("gallery");
 const statusContainer = document.getElementById("statusContainer");
+const modal = document.getElementById("modal");
+const modalBody = document.getElementById("modalBody");
+const closeModalBtn = document.getElementById("closeModalBtn");
 
 // Restringir fecha máxima a hoy
 const todayStr = new Date().toISOString().split("T")[0];
@@ -74,10 +77,10 @@ function createCard(data) {
 
 function openModal(data) {
     const isFavorite = checkIfFavorite(data.date);
-    document.getElementById("modalBody").innerHTML = `
+    modalBody.innerHTML = `
         <small style="color:var(--primary)">${data.date}</small>
         <h2 style="margin:10px 0">${data.title}</h2>
-        <img src="${data.hdurl || data.url}">
+        <img src="${data.hdurl || data.url}" alt="${data.title}">
         <p style="line-height:1.6; color:#cbd5e1; margin-bottom:20px">${data.explanation}</p>
         
         <div style="display:flex; gap:10px">
@@ -90,11 +93,11 @@ function openModal(data) {
             </a>
         </div>
     `;
-    document.getElementById("modal").classList.add("active");
+    modal.classList.add("active");
 }
 
 function closeModal() {
-    document.getElementById("modal").classList.remove("active");
+    modal.classList.remove("active");
 }
 
 /**
@@ -152,6 +155,14 @@ async function loadRange() {
     const data = await apiCall(`&start_date=${start}&end_date=${end}`);
     renderGallery(data.reverse());
 }
+
+// MODAL LISTENERS
+modal.addEventListener("click", () => closeModal());
+modal.querySelector(".modal-content").addEventListener("click", (e) => e.stopPropagation());
+closeModalBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeModal();
+});
 
 // Carga inicial
 loadToday();
