@@ -70,7 +70,7 @@ git clone https://github.com/tuusuario/nasa-space-explorer.git
 cd nasa-space-explorer
 ```
 
-### 2️⃣ Configurar la API Key (solo para APOD en `app.js`)
+### 2️⃣ Configurar la API Key (solo para APOD en `app.js`) 
 
 En `app.js`:
 
