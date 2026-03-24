@@ -66,7 +66,7 @@ https://api.nasa.gov/planetary/apod
 ### 1️⃣ Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/nasa-space-explorer.git
+git clone https://github.com/sephty/nasa-space-explorer.git
 cd nasa-space-explorer
 ```
 
